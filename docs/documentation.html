@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <script src="https://www.gstatic.com/antigravity/web/dev/tailwindcss.min.js"></script>
+  <style>
+    @keyframes gradientShift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes pulse-glow {
+      0%, 100% { box-shadow: 0 0 15px rgba(99,102,241,0.3); }
+      50% { box-shadow: 0 0 30px rgba(99,102,241,0.6); }
+    }
+    @keyframes flowPulse {
+      0% { opacity: 0.4; }
+      50% { opacity: 1; }
+      100% { opacity: 0.4; }
+    }
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateX(-30px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+    .gradient-bg {
+      background: linear-gradient(-45deg, #667eea, #764ba2, #f093fb, #f5576c, #4facfe, #00f2fe);
+      background-size: 400% 400%;
+      animation: gradientShift 8s ease infinite;
+    }
+    .fade-in-up { animation: fadeInUp 0.6s ease-out forwards; }
+    .slide-in { animation: slideIn 0.5s ease-out forwards; }
+    .glow-card { animation: pulse-glow 3s ease-in-out infinite; }
+    .flow-arrow { animation: flowPulse 2s ease-in-out infinite; }
+    .stat-card {
+      transition: all 0.3s ease;
+      border-left: 4px solid transparent;
+    }
+    .stat-card:hover {
+      transform: translateY(-3px);
+      border-left-color: #667eea;
+    }
+    .tab-btn {
+      transition: all 0.3s ease;
+      position: relative;
+    }
+    .tab-btn::after {
+      content: '';
+      position: absolute;
+      bottom: -2px;
+      left: 0;
+      width: 0;
+      height: 3px;
+      border-radius: 3px;
+      transition: width 0.3s ease;
+    }
+    .tab-btn.active::after { width: 100%; }
+    .tab-btn:hover { transform: translateY(-1px); }
+    .pipeline-step {
+      transition: all 0.3s ease;
+    }
+    .pipeline-step:hover {
+      transform: scale(1.05);
+      z-index: 10;
+    }
+    .tag { display: inline-block; padding: 2px 10px; border-radius: 9999px; font-size: 0.7rem; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; }
+    .progress-bar { height: 8px; border-radius: 4px; overflow: hidden; }
+    .progress-fill { height: 100%; border-radius: 4px; transition: width 1s ease-out; }
+    .speaker-row:hover { background: rgba(99,102,241,0.08); }
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: rgba(99,102,241,0.3); border-radius: 3px; }
+  </style>
+</head>
+<body class="bg-[var(--background)] text-[var(--foreground)] antialiased p-0 m-0">
+
+  <!-- HERO HEADER -->
+  <div class="gradient-bg rounded-2xl mx-4 mt-4 p-8 text-white relative overflow-hidden">
+    <div class="absolute inset-0 bg-black/20"></div>
+    <div class="relative z-10">
+      <div class="flex items-center gap-3 mb-2">
+        <span class="text-4xl">🧠</span>
+        <div>
+          <h1 class="text-3xl font-black tracking-tight">Dysarthria AI</h1>
+          <p class="text-white/80 text-sm font-medium mt-1">AI-Based Dysarthric Speech Detection System</p>
+        </div>
+      </div>
+      <div class="flex flex-wrap gap-2 mt-4">
+        <span class="tag bg-white/20 text-white backdrop-blur-sm">UASpeech Corpus</span>
+        <span class="tag bg-white/20 text-white backdrop-blur-sm">Noisereduce</span>
+        <span class="tag bg-white/20 text-white backdrop-blur-sm">TensorFlow 2.21</span>
+        <span class="tag bg-white/20 text-white backdrop-blur-sm">Python 3.11</span>
+        <span class="tag bg-emerald-500/80 text-white">Pipeline Ready ✓</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- KEY METRICS ROW -->
+  <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mx-4 mt-4">
+    <div class="stat-card bg-[var(--card)] rounded-xl p-4 border border-[var(--border)]" style="border-left-color: #667eea;">
+      <p class="text-[var(--muted-foreground)] text-xs font-semibold uppercase tracking-wider">WAV Files</p>
+      <p class="text-2xl font-black mt-1" style="color: #667eea;">143,290</p>
+    </div>
+    <div class="stat-card bg-[var(--card)] rounded-xl p-4 border border-[var(--border)]" style="border-left-color: #f5576c;">
+      <p class="text-[var(--muted-foreground)] text-xs font-semibold uppercase tracking-wider">Speakers</p>
+      <p class="text-2xl font-black mt-1" style="color: #f5576c;">28</p>
+    </div>
+    <div class="stat-card bg-[var(--card)] rounded-xl p-4 border border-[var(--border)]" style="border-left-color: #00c853;">
+      <p class="text-[var(--muted-foreground)] text-xs font-semibold uppercase tracking-wider">Control</p>
+      <p class="text-2xl font-black mt-1" style="color: #00c853;">13</p>
+    </div>
+    <div class="stat-card bg-[var(--card)] rounded-xl p-4 border border-[var(--border)]" style="border-left-color: #ff6d00;">
+      <p class="text-[var(--muted-foreground)] text-xs font-semibold uppercase tracking-wider">Dysarthric</p>
+      <p class="text-2xl font-black mt-1" style="color: #ff6d00;">15</p>
+    </div>
+  </div>
+
+  <!-- TABS NAVIGATION -->
+  <div class="mx-4 mt-6 flex gap-1 overflow-x-auto pb-2 border-b border-[var(--border)]" id="tab-nav">
+    <button class="tab-btn active px-4 py-2 rounded-t-lg text-sm font-semibold whitespace-nowrap" style="color:#667eea" onclick="showTab('overview')" data-tab="overview">
+      📋 Overview
+    </button>
+    <button class="tab-btn px-4 py-2 rounded-t-lg text-sm font-semibold text-[var(--muted-foreground)] whitespace-nowrap" onclick="showTab('dataset')" data-tab="dataset">
+      📊 Dataset
+    </button>
+    <button class="tab-btn px-4 py-2 rounded-t-lg text-sm font-semibold text-[var(--muted-foreground)] whitespace-nowrap" onclick="showTab('pipeline')" data-tab="pipeline">
+      ⚙️ Pipeline
+    </button>
+    <button class="tab-btn px-4 py-2 rounded-t-lg text-sm font-semibold text-[var(--muted-foreground)] whitespace-nowrap" onclick="showTab('audio')" data-tab="audio">
+      🎵 Audio
+    </button>
+    <button class="tab-btn px-4 py-2 rounded-t-lg text-sm font-semibold text-[var(--muted-foreground)] whitespace-nowrap" onclick="showTab('split')" data-tab="split">
+      ✂️ Data Split
+    </button>
+    <button class="tab-btn px-4 py-2 rounded-t-lg text-sm font-semibold text-[var(--muted-foreground)] whitespace-nowrap" onclick="showTab('model')" data-tab="model">
+      🏗️ Architecture
+    </button>
+    <button class="tab-btn px-4 py-2 rounded-t-lg text-sm font-semibold text-[var(--muted-foreground)] whitespace-nowrap" onclick="showTab('env')" data-tab="env">
+      🛠️ Environment
+    </button>
+    <button class="tab-btn px-4 py-2 rounded-t-lg text-sm font-semibold text-[var(--muted-foreground)] whitespace-nowrap" onclick="showTab('quickstart')" data-tab="quickstart">
+      🚀 Quick Start
+    </button>
+  </div>
+
+  <!-- TAB CONTENT -->
+  <div class="mx-4 mt-4 mb-8">
+
+    <!-- OVERVIEW TAB -->
+    <div id="tab-overview" class="tab-content fade-in-up">
+      <div class="bg-[var(--card)] rounded-xl p-6 border border-[var(--border)]">
+        <h2 class="text-xl font-bold mb-3">🎯 Project Goal</h2>
+        <p class="text-[var(--muted-foreground)] leading-relaxed mb-4">
+          Build a reliable end-to-end speech data pipeline for <strong class="text-[var(--foreground)]">binary classification</strong> of speech as
+          <span class="tag bg-emerald-500/15" style="color:#00c853;">Control</span> (healthy) or
+          <span class="tag bg-red-500/15" style="color:#f5576c;">Dysarthric</span> (speech disorder from cerebral palsy) using the UASpeech corpus.
+        </p>
+
+        <h3 class="text-lg font-bold mb-3 mt-6">📌 Current Status</h3>
+        <div class="space-y-3">
+          <div>
+            <div class="flex justify-between text-sm mb-1">
+              <span class="font-semibold" style="color:#00c853;">✅ Data Pipeline</span>
+              <span class="font-bold" style="color:#00c853;">100%</span>
+            </div>
+            <div class="progress-bar bg-emerald-500/10"><div class="progress-fill" style="width:100%; background: linear-gradient(90deg, #00c853, #69f0ae);"></div></div>
+          </div>
+          <div>
+            <div class="flex justify-between text-sm mb-1">
+              <span class="font-semibold" style="color:#00c853;">✅ Dataset Exploration</span>
+              <span class="font-bold" style="color:#00c853;">100%</span>
+            </div>
+            <div class="progress-bar bg-emerald-500/10"><div class="progress-fill" style="width:100%; background: linear-gradient(90deg, #00c853, #69f0ae);"></div></div>
+          </div>
+          <div>
+            <div class="flex justify-between text-sm mb-1">
+              <span class="font-semibold" style="color:#00c853;">✅ Preprocessing Pipeline</span>
+              <span class="font-bold" style="color:#00c853;">100%</span>
+            </div>
+            <div class="progress-bar bg-emerald-500/10"><div class="progress-fill" style="width:100%; background: linear-gradient(90deg, #00c853, #69f0ae);"></div></div>
+          </div>
+          <div>
+            <div class="flex justify-between text-sm mb-1">
+              <span class="font-semibold" style="color:#00c853;">✅ TensorFlow Pipeline</span>
+              <span class="font-bold" style="color:#00c853;">100%</span>
+            </div>
+            <div class="progress-bar bg-emerald-500/10"><div class="progress-fill" style="width:100%; background: linear-gradient(90deg, #00c853, #69f0ae);"></div></div>
+          </div>
+          <div>
+            <div class="flex justify-between text-sm mb-1">
+              <span class="font-semibold" style="color:#00c853;">✅ Sanity Check Baseline</span>
+              <span class="font-bold" style="color:#00c853;">100%</span>
+            </div>
+            <div class="progress-bar bg-emerald-500/10"><div class="progress-fill" style="width:100%; background: linear-gradient(90deg, #00c853, #69f0ae);"></div></div>
+          </div>
+          <div>
+            <div class="flex justify-between text-sm mb-1">
+              <span class="font-semibold" style="color:#ff6d00;">🔄 CNN-BiLSTM-Attention Model</span>
+              <span class="font-bold" style="color:#ff6d00;">0%</span>
+            </div>
+            <div class="progress-bar bg-orange-500/10"><div class="progress-fill" style="width:0%; background: linear-gradient(90deg, #ff6d00, #ffab40);"></div></div>
+          </div>
+        </div>
+
+        <div class="mt-6 p-4 rounded-lg border-l-4" style="border-color: #667eea; background: rgba(102,126,234,0.06);">
+          <p class="text-sm font-semibold" style="color: #667eea;">💡 What's Next?</p>
+          <p class="text-sm text-[var(--muted-foreground)] mt-1">Implement the CNN → BiLSTM → Attention architecture. The data pipeline is fully verified and ready for model training.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- DATASET TAB -->
+    <div id="tab-dataset" class="tab-content fade-in-up hidden">
+      <div class="bg-[var(--card)] rounded-xl p-6 border border-[var(--border)]">
+        <h2 class="text-xl font-bold mb-4">📊 UASpeech Dataset — Noisereduce Version</h2>
+
+        <div class="grid grid-cols-2 md:grid-cols-3 gap-3 mb-6">
+          <div class="p-3 rounded-lg text-center" style="background: linear-gradient(135deg, rgba(102,126,234,0.1), rgba(118,75,162,0.1));">
+            <p class="text-2xl font-black" style="color:#667eea;">143,290</p>
+            <p class="text-xs text-[var(--muted-foreground)] font-semibold mt-1">Valid WAV Files</p>
+          </div>
+          <div class="p-3 rounded-lg text-center" style="background: linear-gradient(135deg, rgba(0,200,83,0.1), rgba(105,240,174,0.1));">
+            <p class="text-2xl font-black" style="color:#00c853;">69,615</p>
+            <p class="text-xs text-[var(--muted-foreground)] font-semibold mt-1">Control Samples</p>
+          </div>
+          <div class="p-3 rounded-lg text-center" style="background: linear-gradient(135deg, rgba(245,87,108,0.1), rgba(255,109,0,0.1));">
+            <p class="text-2xl font-black" style="color:#f5576c;">73,675</p>
+            <p class="text-xs text-[var(--muted-foreground)] font-semibold mt-1">Dysarthric Samples</p>
+          </div>
+          <div class="p-3 rounded-lg text-center" style="background: rgba(156,39,176,0.08);">
+            <p class="text-2xl font-black" style="color:#9c27b0;">255</p>
+            <p class="text-xs text-[var(--muted-foreground)] font-semibold mt-1">Unique Words</p>
+          </div>
+          <div class="p-3 rounded-lg text-center" style="background: rgba(33,150,243,0.08);">
+            <p class="text-2xl font-black" style="color:#2196f3;">3</p>
+            <p class="text-xs text-[var(--muted-foreground)] font-semibold mt-1">Recording Blocks</p>
+          </div>
+          <div class="p-3 rounded-lg text-center" style="background: rgba(255,152,0,0.08);">
+            <p class="text-2xl font-black" style="color:#ff9800;">7</p>
+            <p class="text-xs text-[var(--muted-foreground)] font-semibold mt-1">Microphones (M2–M8)</p>
+          </div>
+        </div>
+
+        <h3 class="text-lg font-bold mb-3">👥 Speaker Breakdown</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div class="rounded-lg p-4 border border-[var(--border)]" style="background: rgba(0,200,83,0.04);">
+            <h4 class="font-bold text-sm mb-2" style="color:#00c853;">🟢 Control Speakers (13)</h4>
+            <div class="flex flex-wrap gap-1.5">
+              <span class="tag bg-emerald-500/15" style="color:#00c853;">CF02</span>
+              <span class="tag bg-emerald-500/15" style="color:#00c853;">CF03</span>
+              <span class="tag bg-emerald-500/15" style="color:#00c853;">CF04</span>
+              <span class="tag bg-emerald-500/15" style="color:#00c853;">CF05</span>
+              <span class="tag bg-emerald-500/15" style="color:#00c853;">CM01</span>
+              <span class="tag bg-emerald-500/15" style="color:#00c853;">CM04</span>
+              <span class="tag bg-emerald-500/15" style="color:#00c853;">CM05</span>
+              <span class="tag bg-emerald-500/15" style="color:#00c853;">CM06</span>
+              <span class="tag bg-emerald-500/15" style="color:#00c853;">CM08</span>
+              <span class="tag bg-emerald-500/15" style="color:#00c853;">CM09</span>
+              <span class="tag bg-emerald-500/15" style="color:#00c853;">CM10</span>
+              <span class="tag bg-emerald-500/15" style="color:#00c853;">CM12</span>
+              <span class="tag bg-emerald-500/15" style="color:#00c853;">CM13</span>
+            </div>
+            <p class="text-xs text-[var(--muted-foreground)] mt-2">5,355 samples each • C prefix = Control</p>
+          </div>
+          <div class="rounded-lg p-4 border border-[var(--border)]" style="background: rgba(245,87,108,0.04);">
+            <h4 class="font-bold text-sm mb-2" style="color:#f5576c;">🔴 Dysarthric Speakers (15)</h4>
+            <div class="flex flex-wrap gap-1.5">
+              <span class="tag bg-red-500/15" style="color:#f5576c;">F02</span>
+              <span class="tag bg-red-500/15" style="color:#f5576c;">F03</span>
+              <span class="tag bg-red-500/15" style="color:#f5576c;">F04</span>
+              <span class="tag bg-red-500/15" style="color:#f5576c;">F05</span>
+              <span class="tag bg-red-500/15" style="color:#f5576c;">M01</span>
+              <span class="tag bg-red-500/15" style="color:#f5576c;">M04</span>
+              <span class="tag bg-red-500/15" style="color:#f5576c;">M05</span>
+              <span class="tag bg-red-500/15" style="color:#f5576c;">M07</span>
+              <span class="tag bg-red-500/15" style="color:#f5576c;">M08</span>
+              <span class="tag bg-red-500/15" style="color:#f5576c;">M09</span>
+              <span class="tag bg-red-500/15" style="color:#f5576c;">M10</span>
+              <span class="tag bg-red-500/15" style="color:#f5576c;">M11</span>
+              <span class="tag bg-red-500/15" style="color:#f5576c;">M12</span>
+              <span class="tag bg-red-500/15" style="color:#f5576c;">M14</span>
+              <span class="tag bg-red-500/15" style="color:#f5576c;">M16</span>
+            </div>
+            <p class="text-xs text-[var(--muted-foreground)] mt-2">2,805–5,355 samples each • F/M prefix = Dysarthric</p>
+          </div>
+        </div>
+
+        <h3 class="text-lg font-bold mb-3 mt-6">📁 Filename Convention</h3>
+        <div class="rounded-lg p-4 border border-[var(--border)] font-mono text-sm" style="background: rgba(102,126,234,0.05);">
+          <p class="text-[var(--muted-foreground)]"><span style="color:#667eea; font-weight:700;">&lt;Speaker&gt;</span>_<span style="color:#f5576c; font-weight:700;">&lt;Block&gt;</span>_<span style="color:#00c853; font-weight:700;">&lt;Word&gt;</span>_<span style="color:#ff9800; font-weight:700;">&lt;Mic&gt;</span>.wav</p>
+          <p class="mt-2 text-[var(--foreground)]">
+            <span style="color:#667eea; font-weight:700;">M16</span>_<span style="color:#f5576c; font-weight:700;">B1</span>_<span style="color:#00c853; font-weight:700;">C1</span>_<span style="color:#ff9800; font-weight:700;">M3</span>.wav
+          </p>
+        </div>
+
+        <h3 class="text-lg font-bold mb-3 mt-6">🏷️ Label Mapping</h3>
+        <div class="grid grid-cols-2 gap-3">
+          <div class="rounded-lg p-4 text-center border-2" style="border-color: #00c853; background: rgba(0,200,83,0.06);">
+            <p class="text-3xl font-black" style="color:#00c853;">0</p>
+            <p class="font-bold mt-1" style="color:#00c853;">Control</p>
+            <p class="text-xs text-[var(--muted-foreground)]">Speakers with C prefix</p>
+          </div>
+          <div class="rounded-lg p-4 text-center border-2" style="border-color: #f5576c; background: rgba(245,87,108,0.06);">
+            <p class="text-3xl font-black" style="color:#f5576c;">1</p>
+            <p class="font-bold mt-1" style="color:#f5576c;">Dysarthric</p>
+            <p class="text-xs text-[var(--muted-foreground)]">Speakers with F/M prefix</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PIPELINE TAB -->
+    <div id="tab-pipeline" class="tab-content fade-in-up hidden">
+      <div class="bg-[var(--card)] rounded-xl p-6 border border-[var(--border)]">
+        <h2 class="text-xl font-bold mb-4">⚙️ End-to-End Data Pipeline</h2>
+        <p class="text-[var(--muted-foreground)] text-sm mb-6">Each step has been implemented and verified. The pipeline processes raw WAV files into model-ready tensors.</p>
+
+        <div class="space-y-2">
+          <div class="pipeline-step flex items-center gap-3 rounded-lg p-3 border border-[var(--border)]" style="background: rgba(102,126,234,0.06);">
+            <span class="w-8 h-8 rounded-full flex items-center justify-center text-white text-xs font-bold shrink-0" style="background:#667eea;">1</span>
+            <div class="flex-1">
+              <p class="font-semibold text-sm">UASpeech WAV Files</p>
+              <p class="text-xs text-[var(--muted-foreground)]">143,290 noisereduce audio files from 28 speakers</p>
+            </div>
+            <span class="tag bg-emerald-500/15" style="color:#00c853;">✓</span>
+          </div>
+          <div class="text-center flow-arrow text-xl" style="color:#667eea;">↓</div>
+
+          <div class="pipeline-step flex items-center gap-3 rounded-lg p-3 border border-[var(--border)]" style="background: rgba(118,75,162,0.06);">
+            <span class="w-8 h-8 rounded-full flex items-center justify-center text-white text-xs font-bold shrink-0" style="background:#764ba2;">2</span>
+            <div class="flex-1">
+              <p class="font-semibold text-sm">Metadata Extraction</p>
+              <p class="text-xs text-[var(--muted-foreground)]">Parse filenames → speaker, block, word, microphone fields</p>
+            </div>
+            <span class="tag bg-emerald-500/15" style="color:#00c853;">✓</span>
+          </div>
+          <div class="text-center flow-arrow text-xl" style="color:#764ba2;">↓</div>
+
+          <div class="pipeline-step flex items-center gap-3 rounded-lg p-3 border border-[var(--border)]" style="background: rgba(240,147,251,0.06);">
+            <span class="w-8 h-8 rounded-full flex items-center justify-center text-white text-xs font-bold shrink-0" style="background:#f093fb;">3</span>
+            <div class="flex-1">
+              <p class="font-semibold text-sm">Binary Labels</p>
+              <p class="text-xs text-[var(--muted-foreground)]">C-prefix → Control (0) | F/M-prefix → Dysarthric (1)</p>
+            </div>
+            <span class="tag bg-emerald-500/15" style="color:#00c853;">✓</span>
+          </div>
+          <div class="text-center flow-arrow text-xl" style="color:#f093fb;">↓</div>
+
+          <div class="pipeline-step flex items-center gap-3 rounded-lg p-3 border border-[var(--border)]" style="background: rgba(245,87,108,0.06);">
+            <span class="w-8 h-8 rounded-full flex items-center justify-center text-white text-xs font-bold shrink-0" style="background:#f5576c;">4</span>
+            <div class="flex-1">
+              <p class="font-semibold text-sm">Speaker-Independent Split</p>
+              <p class="text-xs text-[var(--muted-foreground)]">B1+B3 → Train/Val (speaker-level) | B2 → Test | No leakage</p>
+            </div>
+            <span class="tag bg-emerald-500/15" style="color:#00c853;">✓</span>
+          </div>
+          <div class="text-center flow-arrow text-xl" style="color:#f5576c;">↓</div>
+
+          <div class="pipeline-step flex items-center gap-3 rounded-lg p-3 border border-[var(--border)]" style="background: rgba(79,172,254,0.06);">
+            <span class="w-8 h-8 rounded-full flex items-center justify-center text-white text-xs font-bold shrink-0" style="background:#4facfe;">5</span>
+            <div class="flex-1">
+              <p class="font-semibold text-sm">Audio Preprocessing</p>
+              <p class="text-xs text-[var(--muted-foreground)]">Load → Mono → 16kHz → Normalize amplitude → [-1, 1]</p>
+            </div>
+            <span class="tag bg-emerald-500/15" style="color:#00c853;">✓</span>
+          </div>
+          <div class="text-center flow-arrow text-xl" style="color:#4facfe;">↓</div>
+
+          <div class="pipeline-step flex items-center gap-3 rounded-lg p-3 border border-[var(--border)]" style="background: rgba(0,242,254,0.06);">
+            <span class="w-8 h-8 rounded-full flex items-center justify-center text-white text-xs font-bold shrink-0" style="background:#00bcd4;">6</span>
+            <div class="flex-1">
+              <p class="font-semibold text-sm">Mel Spectrogram (dB)</p>
+              <p class="text-xs text-[var(--muted-foreground)]">128 mel bands | 2048 FFT | 512 hop | power-to-dB</p>
+            </div>
+            <span class="tag bg-emerald-500/15" style="color:#00c853;">✓</span>
+          </div>
+          <div class="text-center flow-arrow text-xl" style="color:#00bcd4;">↓</div>
+
+          <div class="pipeline-step flex items-center gap-3 rounded-lg p-3 border border-[var(--border)]" style="background: rgba(0,200,83,0.06);">
+            <span class="w-8 h-8 rounded-full flex items-center justify-center text-white text-xs font-bold shrink-0" style="background:#00c853;">7</span>
+            <div class="flex-1">
+              <p class="font-semibold text-sm">Fixed-Size Tensor</p>
+              <p class="text-xs text-[var(--muted-foreground)]">Pad/crop → (128, 157, 1) | 5.0s max duration | 94% coverage</p>
+            </div>
+            <span class="tag bg-emerald-500/15" style="color:#00c853;">✓</span>
+          </div>
+          <div class="text-center flow-arrow text-xl" style="color:#00c853;">↓</div>
+
+          <div class="pipeline-step flex items-center gap-3 rounded-lg p-3 border border-[var(--border)] glow-card" style="background: rgba(255,152,0,0.06);">
+            <span class="w-8 h-8 rounded-full flex items-center justify-center text-white text-xs font-bold shrink-0" style="background:#ff9800;">8</span>
+            <div class="flex-1">
+              <p class="font-semibold text-sm">TensorFlow tf.data Pipeline</p>
+              <p class="text-xs text-[var(--muted-foreground)]">Lazy loading | Auto-prefetch | Batched (32) | float32</p>
+            </div>
+            <span class="tag bg-emerald-500/15" style="color:#00c853;">✓</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- AUDIO TAB -->
+    <div id="tab-audio" class="tab-content fade-in-up hidden">
+      <div class="bg-[var(--card)] rounded-xl p-6 border border-[var(--border)]">
+        <h2 class="text-xl font-bold mb-4">🎵 Audio Analysis</h2>
+
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
+          <div class="p-3 rounded-lg text-center border border-[var(--border)]">
+            <p class="text-xl font-black" style="color:#2196f3;">16 kHz</p>
+            <p class="text-xs text-[var(--muted-foreground)] font-semibold">Sample Rate</p>
+          </div>
+          <div class="p-3 rounded-lg text-center border border-[var(--border)]">
+            <p class="text-xl font-black" style="color:#9c27b0;">Mono</p>
+            <p class="text-xs text-[var(--muted-foreground)] font-semibold">Channels</p>
+          </div>
+          <div class="p-3 rounded-lg text-center border border-[var(--border)]">
+            <p class="text-xl font-black" style="color:#00c853;">Consistent</p>
+            <p class="text-xs text-[var(--muted-foreground)] font-semibold">No Resampling</p>
+          </div>
+          <div class="p-3 rounded-lg text-center border border-[var(--border)]">
+            <p class="text-xl font-black" style="color:#f5576c;">16-bit</p>
+            <p class="text-xs text-[var(--muted-foreground)] font-semibold">PCM Format</p>
+          </div>
+        </div>
+
+        <h3 class="text-lg font-bold mb-3">⏱️ Duration Statistics</h3>
+        <div class="rounded-lg p-4 border border-[var(--border)] mb-4">
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
+            <div>
+              <p class="text-xs text-[var(--muted-foreground)] font-semibold">MIN</p>
+              <p class="text-lg font-black" style="color:#667eea;">1.15s</p>
+            </div>
+            <div>
+              <p class="text-xs text-[var(--muted-foreground)] font-semibold">MEAN</p>
+              <p class="text-lg font-black" style="color:#764ba2;">2.50s</p>
+            </div>
+            <div>
+              <p class="text-xs text-[var(--muted-foreground)] font-semibold">MEDIAN</p>
+              <p class="text-lg font-black" style="color:#f093fb;">2.05s</p>
+            </div>
+            <div>
+              <p class="text-xs text-[var(--muted-foreground)] font-semibold">MAX</p>
+              <p class="text-lg font-black" style="color:#f5576c;">15.14s</p>
+            </div>
+          </div>
+          <div class="mt-4 text-center">
+            <p class="text-xs text-[var(--muted-foreground)]">95th percentile: <strong>5.60s</strong> · 99th percentile: <strong>9.81s</strong></p>
+            <p class="text-sm font-semibold mt-1" style="color:#00c853;">94% of samples fit within the 5.0s cutoff (no cropping)</p>
+          </div>
+        </div>
+
+        <h3 class="text-lg font-bold mb-3">🎛️ Preprocessing Parameters</h3>
+        <div class="overflow-x-auto">
+          <table class="w-full text-sm">
+            <thead>
+              <tr class="text-left text-[var(--muted-foreground)]">
+                <th class="p-2 font-semibold">Parameter</th>
+                <th class="p-2 font-semibold">Value</th>
+                <th class="p-2 font-semibold">Rationale</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="border-t border-[var(--border)] speaker-row"><td class="p-2 font-mono font-bold" style="color:#667eea;">target_sr</td><td class="p-2">16,000 Hz</td><td class="p-2 text-[var(--muted-foreground)]">Native UASpeech rate</td></tr>
+              <tr class="border-t border-[var(--border)] speaker-row"><td class="p-2 font-mono font-bold" style="color:#764ba2;">n_mels</td><td class="p-2">128</td><td class="p-2 text-[var(--muted-foreground)]">Standard for speech</td></tr>
+              <tr class="border-t border-[var(--border)] speaker-row"><td class="p-2 font-mono font-bold" style="color:#f093fb;">n_fft</td><td class="p-2">2048</td><td class="p-2 text-[var(--muted-foreground)]">Good freq resolution</td></tr>
+              <tr class="border-t border-[var(--border)] speaker-row"><td class="p-2 font-mono font-bold" style="color:#f5576c;">hop_length</td><td class="p-2">512</td><td class="p-2 text-[var(--muted-foreground)]">~32ms hop</td></tr>
+              <tr class="border-t border-[var(--border)] speaker-row"><td class="p-2 font-mono font-bold" style="color:#4facfe;">max_duration</td><td class="p-2">5.0s</td><td class="p-2 text-[var(--muted-foreground)]">Covers 94% of data</td></tr>
+              <tr class="border-t border-[var(--border)] speaker-row"><td class="p-2 font-mono font-bold" style="color:#00c853;">input_shape</td><td class="p-2">(128, 157, 1)</td><td class="p-2 text-[var(--muted-foreground)]">mel × frames × ch</td></tr>
+              <tr class="border-t border-[var(--border)] speaker-row"><td class="p-2 font-mono font-bold" style="color:#ff9800;">range</td><td class="p-2">[-80, 0] dB</td><td class="p-2 text-[var(--muted-foreground)]">power-to-dB (ref=max)</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- SPLIT TAB -->
+    <div id="tab-split" class="tab-content fade-in-up hidden">
+      <div class="bg-[var(--card)] rounded-xl p-6 border border-[var(--border)]">
+        <h2 class="text-xl font-bold mb-2">✂️ Speaker-Independent Data Split</h2>
+        <p class="text-[var(--muted-foreground)] text-sm mb-4">Standard UASpeech convention: B1+B3 → Training, B2 → Testing. Validation split at the <strong class="text-[var(--foreground)]">speaker level</strong> to prevent data leakage.</p>
+
+        <div class="p-3 rounded-lg mb-5 border-l-4 text-sm" style="border-color:#00c853; background:rgba(0,200,83,0.06);">
+          <strong style="color:#00c853;">✓ No Speaker Leakage</strong> — Verified programmatically. Validation speakers have ALL their files in validation and NONE in training.
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+          <div class="rounded-xl p-5 text-center border-2" style="border-color:#4facfe; background: rgba(79,172,254,0.06);">
+            <p class="text-xs font-bold uppercase tracking-wider" style="color:#4facfe;">Training</p>
+            <p class="text-3xl font-black mt-2" style="color:#4facfe;">85,178</p>
+            <p class="text-xs text-[var(--muted-foreground)] mt-1">25 speakers · B1, B3</p>
+            <div class="mt-3 grid grid-cols-2 gap-2 text-xs">
+              <div class="rounded p-1" style="background:rgba(0,200,83,0.1);"><span style="color:#00c853;">Control: 42,840</span></div>
+              <div class="rounded p-1" style="background:rgba(245,87,108,0.1);"><span style="color:#f5576c;">Dysarth: 42,338</span></div>
+            </div>
+          </div>
+          <div class="rounded-xl p-5 text-center border-2" style="border-color:#ff9800; background: rgba(255,152,0,0.06);">
+            <p class="text-xs font-bold uppercase tracking-wider" style="color:#ff9800;">Validation</p>
+            <p class="text-3xl font-black mt-2" style="color:#ff9800;">10,200</p>
+            <p class="text-xs text-[var(--muted-foreground)] mt-1">3 speakers · B1, B3</p>
+            <div class="mt-3 grid grid-cols-2 gap-2 text-xs">
+              <div class="rounded p-1" style="background:rgba(0,200,83,0.1);"><span style="color:#00c853;">Control: 3,570</span></div>
+              <div class="rounded p-1" style="background:rgba(245,87,108,0.1);"><span style="color:#f5576c;">Dysarth: 6,630</span></div>
+            </div>
+          </div>
+          <div class="rounded-xl p-5 text-center border-2" style="border-color:#f5576c; background: rgba(245,87,108,0.06);">
+            <p class="text-xs font-bold uppercase tracking-wider" style="color:#f5576c;">Testing</p>
+            <p class="text-3xl font-black mt-2" style="color:#f5576c;">47,912</p>
+            <p class="text-xs text-[var(--muted-foreground)] mt-1">28 speakers · B2</p>
+            <div class="mt-3 grid grid-cols-2 gap-2 text-xs">
+              <div class="rounded p-1" style="background:rgba(0,200,83,0.1);"><span style="color:#00c853;">Control: 23,205</span></div>
+              <div class="rounded p-1" style="background:rgba(245,87,108,0.1);"><span style="color:#f5576c;">Dysarth: 24,707</span></div>
+            </div>
+          </div>
+        </div>
+
+        <h3 class="text-lg font-bold mb-2">🔒 Validation Speakers (Held Out)</h3>
+        <div class="flex gap-2">
+          <span class="tag bg-orange-500/15" style="color:#ff9800;">CM12</span>
+          <span class="tag bg-orange-500/15" style="color:#ff9800;">M10</span>
+          <span class="tag bg-orange-500/15" style="color:#ff9800;">M12</span>
+        </div>
+        <p class="text-xs text-[var(--muted-foreground)] mt-2">These speakers are completely excluded from training — all their B1+B3 files go to validation only.</p>
+      </div>
+    </div>
+
+    <!-- MODEL TAB -->
+    <div id="tab-model" class="tab-content fade-in-up hidden">
+      <div class="bg-[var(--card)] rounded-xl p-6 border border-[var(--border)]">
+        <h2 class="text-xl font-bold mb-4">🏗️ Planned Model Architecture</h2>
+        <p class="text-[var(--muted-foreground)] text-sm mb-6">The final model uses a hybrid CNN-BiLSTM-Attention architecture. <strong class="text-[var(--foreground)]">Not yet implemented</strong> — the data pipeline is ready and waiting.</p>
+
+        <div class="space-y-2 max-w-md mx-auto">
+          <div class="rounded-xl p-4 text-center text-white font-bold" style="background: linear-gradient(135deg, #667eea, #764ba2);">
+            🎵 Mel Spectrogram Input<br><span class="text-xs font-normal opacity-80">(128, 157, 1)</span>
+          </div>
+          <div class="text-center text-2xl flow-arrow" style="color:#667eea;">⬇</div>
+          <div class="rounded-xl p-4 text-center text-white font-bold" style="background: linear-gradient(135deg, #4facfe, #00f2fe);">
+            🔍 CNN Layers<br><span class="text-xs font-normal opacity-80">Spatial feature extraction</span>
+          </div>
+          <div class="text-center text-2xl flow-arrow" style="color:#4facfe;">⬇</div>
+          <div class="rounded-xl p-4 text-center text-white font-bold" style="background: linear-gradient(135deg, #f093fb, #f5576c);">
+            🔄 BiLSTM Layers<br><span class="text-xs font-normal opacity-80">Temporal sequence modeling</span>
+          </div>
+          <div class="text-center text-2xl flow-arrow" style="color:#f093fb;">⬇</div>
+          <div class="rounded-xl p-4 text-center text-white font-bold" style="background: linear-gradient(135deg, #ff9800, #f5576c);">
+            🎯 Attention Mechanism<br><span class="text-xs font-normal opacity-80">Focus on informative regions</span>
+          </div>
+          <div class="text-center text-2xl flow-arrow" style="color:#ff9800;">⬇</div>
+          <div class="rounded-xl p-4 text-center text-white font-bold glow-card" style="background: linear-gradient(135deg, #00c853, #69f0ae);">
+            ✅ Binary Classification<br><span class="text-xs font-normal opacity-80">Control (0) vs Dysarthric (1)</span>
+          </div>
+        </div>
+
+        <div class="mt-6 p-4 rounded-lg border-l-4" style="border-color: #ff9800; background: rgba(255,152,0,0.06);">
+          <p class="text-sm"><span class="font-bold" style="color:#ff9800;">⚠️ Current Baseline:</span> A minimal 5,889-parameter CNN was trained (3 epochs, 128 samples) <em>only</em> to verify the pipeline works. It is NOT the final model.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ENVIRONMENT TAB -->
+    <div id="tab-env" class="tab-content fade-in-up hidden">
+      <div class="bg-[var(--card)] rounded-xl p-6 border border-[var(--border)]">
+        <h2 class="text-xl font-bold mb-4">🛠️ Environment & Dependencies</h2>
+
+        <div class="overflow-x-auto">
+          <table class="w-full text-sm">
+            <thead>
+              <tr class="text-left text-[var(--muted-foreground)]">
+                <th class="p-2 font-semibold">Package</th>
+                <th class="p-2 font-semibold">Version</th>
+                <th class="p-2 font-semibold">Purpose</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="border-t border-[var(--border)] speaker-row"><td class="p-2 font-bold" style="color:#667eea;">🐍 Python</td><td class="p-2 font-mono">3.11.8</td><td class="p-2 text-[var(--muted-foreground)]">Runtime</td></tr>
+              <tr class="border-t border-[var(--border)] speaker-row"><td class="p-2 font-bold" style="color:#ff6d00;">🧠 TensorFlow</td><td class="p-2 font-mono">2.21.0</td><td class="p-2 text-[var(--muted-foreground)]">Deep learning framework</td></tr>
+              <tr class="border-t border-[var(--border)] speaker-row"><td class="p-2 font-bold" style="color:#4facfe;">📐 NumPy</td><td class="p-2 font-mono">2.4.6</td><td class="p-2 text-[var(--muted-foreground)]">Numerical computing</td></tr>
+              <tr class="border-t border-[var(--border)] speaker-row"><td class="p-2 font-bold" style="color:#00c853;">🐼 Pandas</td><td class="p-2 font-mono">3.0.6</td><td class="p-2 text-[var(--muted-foreground)]">Data manipulation</td></tr>
+              <tr class="border-t border-[var(--border)] speaker-row"><td class="p-2 font-bold" style="color:#f5576c;">🎵 Librosa</td><td class="p-2 font-mono">0.11.0</td><td class="p-2 text-[var(--muted-foreground)]">Audio analysis</td></tr>
+              <tr class="border-t border-[var(--border)] speaker-row"><td class="p-2 font-bold" style="color:#9c27b0;">📊 Matplotlib</td><td class="p-2 font-mono">3.11.2</td><td class="p-2 text-[var(--muted-foreground)]">Visualization</td></tr>
+              <tr class="border-t border-[var(--border)] speaker-row"><td class="p-2 font-bold" style="color:#ff9800;">📈 Scikit-learn</td><td class="p-2 font-mono">1.9.1</td><td class="p-2 text-[var(--muted-foreground)]">ML utilities</td></tr>
+              <tr class="border-t border-[var(--border)] speaker-row"><td class="p-2 font-bold" style="color:#2196f3;">🔊 SoundFile</td><td class="p-2 font-mono">0.14.0</td><td class="p-2 text-[var(--muted-foreground)]">Audio I/O</td></tr>
+              <tr class="border-t border-[var(--border)] speaker-row"><td class="p-2 font-bold" style="color:#00bcd4;">🧮 SciPy</td><td class="p-2 font-mono">1.17.1</td><td class="p-2 text-[var(--muted-foreground)]">Scientific computing</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3 class="text-lg font-bold mt-6 mb-3">📁 Project Structure</h3>
+        <div class="rounded-lg p-4 border border-[var(--border)] font-mono text-xs leading-relaxed" style="background: rgba(102,126,234,0.04);">
+          <span style="color:#667eea; font-weight:700;">speech disorder gp/</span><br>
+          ├── <span style="color:#f5576c;">data/</span><br>
+          │&nbsp;&nbsp; ├── <span style="color:#f5576c;">raw/</span><span class="text-[var(--muted-foreground)]"> ← UASpeech extracted here</span><br>
+          │&nbsp;&nbsp; ├── <span style="color:#f5576c;">processed/</span><br>
+          │&nbsp;&nbsp; └── <span style="color:#f5576c;">metadata/</span><span class="text-[var(--muted-foreground)]"> ← CSV metadata + splits</span><br>
+          ├── <span style="color:#4facfe;">notebooks/</span><br>
+          │&nbsp;&nbsp; ├── <span style="color:#4facfe;">01_data_exploration.ipynb</span><br>
+          │&nbsp;&nbsp; └── <span style="color:#4facfe;">02_audio_preprocessing.ipynb</span><br>
+          ├── <span style="color:#00c853;">src/</span><br>
+          │&nbsp;&nbsp; ├── <span style="color:#00c853;">data/</span> loader.py, preprocessing.py<br>
+          │&nbsp;&nbsp; ├── <span style="color:#00c853;">features/</span> audio_features.py<br>
+          │&nbsp;&nbsp; └── <span style="color:#00c853;">utils/</span> config.py<br>
+          ├── <span style="color:#9c27b0;">models/</span><br>
+          ├── <span style="color:#ff9800;">outputs/</span> figures/, logs/, results/<br>
+          ├── <span style="color:#764ba2;">scripts/</span> run_pipeline_test.py<br>
+          ├── requirements.txt<br>
+          ├── README.md<br>
+          └── .gitignore
+        </div>
+      </div>
+    </div>
+
+    <!-- QUICK START TAB -->
+    <div id="tab-quickstart" class="tab-content fade-in-up hidden">
+      <div class="bg-[var(--card)] rounded-xl p-6 border border-[var(--border)]">
+        <h2 class="text-xl font-bold mb-4">🚀 Quick Start Guide</h2>
+
+        <div class="space-y-4">
+          <div class="flex gap-3 items-start slide-in" style="animation-delay: 0.1s;">
+            <span class="w-8 h-8 rounded-full flex items-center justify-center text-white text-sm font-bold shrink-0" style="background: linear-gradient(135deg, #667eea, #764ba2);">1</span>
+            <div class="flex-1">
+              <p class="font-bold text-sm">Activate Virtual Environment</p>
+              <div class="rounded-lg p-3 mt-1 font-mono text-xs border border-[var(--border)]" style="background: rgba(102,126,234,0.05);">
+                cd "E:\speech disorder gp"<br>.venv\Scripts\Activate.ps1
+              </div>
+            </div>
+          </div>
+
+          <div class="flex gap-3 items-start slide-in" style="animation-delay: 0.2s;">
+            <span class="w-8 h-8 rounded-full flex items-center justify-center text-white text-sm font-bold shrink-0" style="background: linear-gradient(135deg, #4facfe, #00f2fe);">2</span>
+            <div class="flex-1">
+              <p class="font-bold text-sm">Verify Installation</p>
+              <div class="rounded-lg p-3 mt-1 font-mono text-xs border border-[var(--border)]" style="background: rgba(79,172,254,0.05);">
+                python -c "import numpy, pandas, librosa, tensorflow; print('All OK')"
+              </div>
+            </div>
+          </div>
+
+          <div class="flex gap-3 items-start slide-in" style="animation-delay: 0.3s;">
+            <span class="w-8 h-8 rounded-full flex items-center justify-center text-white text-sm font-bold shrink-0" style="background: linear-gradient(135deg, #00c853, #69f0ae);">3</span>
+            <div class="flex-1">
+              <p class="font-bold text-sm">Run Full Pipeline Test</p>
+              <div class="rounded-lg p-3 mt-1 font-mono text-xs border border-[var(--border)]" style="background: rgba(0,200,83,0.05);">
+                $env:PYTHONIOENCODING='utf-8'; $env:TF_CPP_MIN_LOG_LEVEL='2'<br>python scripts\run_pipeline_test.py
+              </div>
+              <p class="text-xs text-[var(--muted-foreground)] mt-1">Runs all 14 phases: discovery → metadata → labels → stats → audio → spectrograms → splits → TF pipeline → baseline model</p>
+            </div>
+          </div>
+
+          <div class="flex gap-3 items-start slide-in" style="animation-delay: 0.4s;">
+            <span class="w-8 h-8 rounded-full flex items-center justify-center text-white text-sm font-bold shrink-0" style="background: linear-gradient(135deg, #ff9800, #f5576c);">4</span>
+            <div class="flex-1">
+              <p class="font-bold text-sm">Explore Interactively (Optional)</p>
+              <div class="rounded-lg p-3 mt-1 font-mono text-xs border border-[var(--border)]" style="background: rgba(255,152,0,0.05);">
+                # Open in VS Code and run:<br>notebooks/01_data_exploration.ipynb<br>notebooks/02_audio_preprocessing.ipynb
+              </div>
+              <p class="text-xs text-[var(--muted-foreground)] mt-1">Select .venv kernel in VS Code (top-right kernel picker)</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-6 p-4 rounded-lg" style="background: linear-gradient(135deg, rgba(102,126,234,0.08), rgba(118,75,162,0.08));">
+          <p class="text-sm font-bold" style="color:#667eea;">💡 Pro Tip</p>
+          <p class="text-xs text-[var(--muted-foreground)] mt-1">The pipeline script generates all metadata CSVs, visualizations, and runs a full sanity check automatically. Check <code>outputs/figures/</code> for generated plots and <code>data/metadata/</code> for the split CSVs.</p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- FOOTER -->
+  <div class="mx-4 mb-6 p-4 rounded-xl border border-[var(--border)] text-center text-xs text-[var(--muted-foreground)]" style="background: rgba(102,126,234,0.03);">
+    <strong>Dysarthria AI</strong> · Graduation Project · UASpeech Noisereduce · TensorFlow 2.21 · Python 3.11<br>
+    <span style="color:#00c853;">Pipeline Complete ✓</span> · Ready for CNN-BiLSTM-Attention Model
+  </div>
+
+  <script>
+    function showTab(tabId) {
+      document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+      document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.classList.remove('active');
+        btn.style.color = '';
+        btn.classList.add('text-[var(--muted-foreground)]');
+      });
+      const target = document.getElementById('tab-' + tabId);
+      if (target) {
+        target.classList.remove('hidden');
+        target.style.animation = 'none';
+        target.offsetHeight;
+        target.style.animation = '';
+      }
+      const activeBtn = document.querySelector(`[data-tab="${tabId}"]`);
+      if (activeBtn) {
+        activeBtn.classList.add('active');
+        activeBtn.classList.remove('text-[var(--muted-foreground)]');
+        activeBtn.style.color = '#667eea';
+      }
+    }
+    // Set colored underlines
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+      const colors = {
+        overview: '#667eea', dataset: '#f5576c', pipeline: '#4facfe', audio: '#9c27b0',
+        split: '#ff9800', model: '#00c853', env: '#2196f3', quickstart: '#f093fb'
+      };
+      const tab = btn.dataset.tab;
+      btn.style.setProperty('--tab-color', colors[tab] || '#667eea');
+      btn.querySelector || null;
+      const style = document.createElement('style');
+      style.textContent = `[data-tab="${tab}"].active::after { background: ${colors[tab]}; }`;
+      document.head.appendChild(style);
+    });
+  </script>
+</body>
+</html>

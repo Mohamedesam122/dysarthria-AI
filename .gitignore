@@ -1,0 +1,59 @@
+# ============================================================
+# Dysarthria AI — .gitignore
+# ============================================================
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.egg-info/
+dist/
+build/
+*.egg
+
+# Virtual Environment
+.venv/
+venv/
+env/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Environment
+.env
+.env.local
+
+# OS
+Thumbs.db
+.DS_Store
+desktop.ini
+
+# ============================================================
+# Dataset — DO NOT commit UASpeech data to Git
+# ============================================================
+data/raw/
+data/processed/
+*.tgz
+*.tar.gz
+*.zip
+
+# Model checkpoints (can be large)
+models/*.h5
+models/*.keras
+models/*.pb
+models/checkpoints/
+
+# Outputs (regenerable)
+outputs/figures/
+outputs/logs/
+outputs/results/
+
+# Misc
+*.log
