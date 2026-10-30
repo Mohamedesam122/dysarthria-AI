@@ -57,3 +57,13 @@ outputs/results/
 
 # Misc
 *.log
+
+# Frontend additions (Person 6)
+.streamlit/secrets.toml
+uploads/
+*.wav
+*.mp3
+*.mp4
+*.pt
+*.pth
+*.ckpt
